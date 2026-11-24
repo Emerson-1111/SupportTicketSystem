@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: adminpassword
+      POSTGRES_DB: SupportTicketDb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    build: 
+      context: ./SupportTicketSystemBack
+      dockerfile: Dockerfile
+    ports:
+      - "5032:8080"
+    environment:
+      - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=SupportTicketDb;Username=postgres;Password=adminpassword
+    depends_on:
+      - db
+
+  frontend:
+    build:
+      context: ./SupportTicketSystemFront/support-ticket-client
+      dockerfile: Dockerfile
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:

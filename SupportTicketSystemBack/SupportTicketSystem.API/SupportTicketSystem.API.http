@@ -1,0 +1,6 @@
+@SupportTicketSystem.API_HostAddress = http://localhost:5032
+
+GET {{SupportTicketSystem.API_HostAddress}}/api/Tickets
+Accept: application/json
+
+###
